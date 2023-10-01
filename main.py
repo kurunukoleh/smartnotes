@@ -1,6 +1,35 @@
 from PyQt5.QtWidgets import *
 
 app = QApplication([])
+
+app.setStyleSheet("""
+    QWidget {
+        background-color: #DED3A6;
+        color : #759242;
+        font-size: 15px;
+    }
+
+    QPushButton {
+        background-color: #759242;
+        color : #374709;
+        border-radius: 1px ;
+        border-color: #374709;
+        border-style: hidden;
+        border-width: 5px;
+        min-height: 20px;
+        font-size: 15px;
+        font-family: none;
+
+    }
+    
+    QLabel {
+        background-color: #DED3A6;
+        color : #374709;
+        font-size: 15px;
+    }
+
+""")
+
 window = QWidget()
 window.resize(800 , 500)
 mainline = QHBoxLayout()
