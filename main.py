@@ -51,7 +51,7 @@ baton2 = QPushButton('видалити замітку')
 baton3 = QPushButton('зберегти замітку')
 baton4 = QPushButton('додати до замітки')
 baton5 = QPushButton('відкріпити від замітки')
-baton6 = QPushButton('Шукати по тегу')
+baton6 = QPushButton('Шукати замітки за тегом')
 text1 = QLabel('список заміток')
 text2 = QLabel('список тегів')
 pole1 = QTextEdit()
@@ -127,6 +127,21 @@ def del_note():
     else:
         print("Замітка для вилучення не обрана!")
 
+def add_tag():#кнопка добавити тег
+    if pole2.selectedItems():
+        key = pole2.selectedItems()[0].text()
+        tag = pole4.text()
+        if not tag in notes[key]["теги"]:
+            notes[key]["теги"].append(tag)
+            pole3.addItem(tag)
+            pole4.clear()
+        with open("notes_data.json", "w", encoding="utf-8") as file:
+            json.dump(notes, file,  ensure_ascii=False)
+        print(notes)
+    else:
+        print("Замітка для додавання тега не обрана!")
+
+
 def del_tag(): #кнопка видалити тег
     if pole3.selectedItems():
         key = pole2.selectedItems()[0].text()
@@ -171,7 +186,7 @@ def reset_search():
 baton1.clicked.connect(add_note)
 baton2.clicked.connect(del_note)
 baton3.clicked.connect(save_note)
-baton4.clicked.connect(add_note)
+baton4.clicked.connect(add_tag)
 baton5.clicked.connect(del_tag)
 baton6.clicked.connect(search_tag)
 pole2.itemClicked.connect(show_note)
