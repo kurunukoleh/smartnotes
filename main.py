@@ -3,29 +3,26 @@ from PyQt5.QtWidgets import *
 import json
 
 try:
-    with open ("notes_data.json" , "r" , encoding="utf-8") as file:
+    with open("notes_data.json", "r", encoding="utf-8") as file:
         notes = json.load(file)
 
 except:
     notes = {}
 
-
-
-
 app = QApplication([])
 
 app.setStyleSheet("""
     QWidget {
-        background-color: #DED3A6;
-        color : #759242;
+        background-color:#000000 ;
+        color : #ffffff;
         font-size: 15px;
     }
 
     QPushButton {
-        background-color: #759242;
-        color : #374709;
-        border-radius: 1px ;
-        border-color: #374709;
+        background-color: #3232ff;
+        color : #aaaaff;
+        border-radius: 7px ;
+        border-color: #3232ff;
         border-style: hidden;
         border-width: 5px;
         min-height: 20px;
@@ -33,17 +30,35 @@ app.setStyleSheet("""
         font-family: none;
 
     }
-    
+
     QLabel {
-        background-color: #DED3A6;
-        color : #374709;
+        background-color: #000000 ;
+        color : #ffffff;
+        font-size: 15px;
+    }
+    
+    QTextEdit {
+        background-color: #1111111 ;
+        color : #ffffff;
+        font-size: 15px;
+    }
+    
+    QListWidget {
+        background-color: #111111 ;
+        color : #ffffff;
+        font-size: 15px;
+    }
+    
+    QLineEdit {
+        background-color: #000000 ;
+        color : #ffffff;
         font-size: 15px;
     }
 
 """)
 
 window = QWidget()
-window.resize(800 , 500)
+window.resize(800, 500)
 mainline = QHBoxLayout()
 
 baton1 = QPushButton('створити замітку')
@@ -81,19 +96,20 @@ line2.addWidget(baton5)
 linemenu.addLayout(line2)
 linemenu.addWidget(baton6)
 
+
 def add_note():
-    note_name, ok = QInputDialog.getText(window , "Дотати заміну" ,"Назва замітки")
+    note_name, ok = QInputDialog.getText(window, "Дотати заміну", "Назва замітки")
     if ok and note_name != "":
-        notes[note_name]={
-            "текст":"",
+        notes[note_name] = {
+            "текст": "",
             "теги": []
         }
         pole2.clear()
         pole1.clear()
         pole2.addItems(notes)
 
-        with open("notes_data.json" , "w" , encoding="utf-8") as file:
-            json.dump(notes , file , ensure_ascii=False , indent=4)
+        with open("notes_data.json", "w", encoding="utf-8") as file:
+            json.dump(notes, file, ensure_ascii=False, indent=4)
 
 
 def save_note():
@@ -101,9 +117,10 @@ def save_note():
         key = pole2.selectedItems()[0].text()
         notes[key]["текст"] = pole1.toPlainText()
         with open("notes_data.json", "w", encoding="utf-8") as file:
-            json.dump(notes, file, ensure_ascii=False , indent=4)
+            json.dump(notes, file, ensure_ascii=False, indent=4)
     else:
         print("Замітка для збереження не вибрана!")
+
 
 def show_note():
     # отримуємо текст із замітки з виділеною назвою та відображаємо її в полі редагування
@@ -112,6 +129,7 @@ def show_note():
     pole1.setText(notes[key]["текст"])
     pole3.clear()
     pole3.addItems(notes[key]["теги"])
+
 
 def del_note():
     if pole2.selectedItems():
@@ -127,7 +145,8 @@ def del_note():
     else:
         print("Замітка для вилучення не обрана!")
 
-def add_tag():#кнопка добавити тег
+
+def add_tag():  # кнопка добавити тег
     if pole2.selectedItems():
         key = pole2.selectedItems()[0].text()
         tag = pole4.text()
@@ -136,13 +155,13 @@ def add_tag():#кнопка добавити тег
             pole3.addItem(tag)
             pole4.clear()
         with open("notes_data.json", "w", encoding="utf-8") as file:
-            json.dump(notes, file,  ensure_ascii=False)
+            json.dump(notes, file, ensure_ascii=False)
         print(notes)
     else:
         print("Замітка для додавання тега не обрана!")
 
 
-def del_tag(): #кнопка видалити тег
+def del_tag():  # кнопка видалити тег
     if pole3.selectedItems():
         key = pole2.selectedItems()[0].text()
         tag = pole3.selectedItems()[0].text()
@@ -155,7 +174,7 @@ def del_tag(): #кнопка видалити тег
         print("Тег для вилучення не обраний!")
 
 
-def search_tag(): #кнопка "шукати замітку за тегом"
+def search_tag():  # кнопка "шукати замітку за тегом"
     button_text = baton6.text()
     tag = pole4.text()
 
@@ -163,6 +182,7 @@ def search_tag(): #кнопка "шукати замітку за тегом"
         apply_tag_search(tag)
     elif button_text == "Скинути пошук":
         reset_search()
+
 
 def apply_tag_search(tag):
     notes_filtered = {}
@@ -174,6 +194,7 @@ def apply_tag_search(tag):
     pole2.clear()
     pole3.clear()
     pole2.addItems(notes_filtered)
+
 
 def reset_search():
     pole4.clear()
@@ -190,7 +211,6 @@ baton4.clicked.connect(add_tag)
 baton5.clicked.connect(del_tag)
 baton6.clicked.connect(search_tag)
 pole2.itemClicked.connect(show_note)
-
 
 window.setLayout(mainline)
 window.show()
